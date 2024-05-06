@@ -4,7 +4,7 @@ import { RouterLink, RouterView } from 'vue-router'
 
 <template>
   <div class="navbar gap-4">
-    <button class="btn btn-ghost text-xl">
+    <button class="btn btn-ghost text-xl" @click="$router.push('/')">
       <font-awesome-icon icon="fa-solid fa-ghost"></font-awesome-icon>
       ViteFast
     </button>
