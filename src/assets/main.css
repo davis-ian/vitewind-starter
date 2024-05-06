@@ -12,15 +12,21 @@ html {
   scroll-behavior: smooth;
 }
 
+::selection {
+  background-color: theme('colors.primary'); /* Use Tailwind's primary color */
+  color: white; /* Adjust text color for good contrast */
+}
+
 a {
   transition: 0.3s;
-  @apply text-primary;
+  color: theme('colors.primary');
 }
 
 a:hover {
   text-decoration: underline;
+  color: theme('colors.accent') !important;
 }
 
 a:visited {
-  @apply text-accent;
+  color: theme('colors.secondary');
 }
