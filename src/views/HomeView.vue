@@ -6,11 +6,11 @@
       </div>
 
       <div class="bg-base-200">
-        <pricing class="py-24 px-8 mx-auto max-w-5xl"></pricing>
+        <pricing id="pricing" class="py-24 px-8 mx-auto max-w-5xl"></pricing>
       </div>
 
       <div class="bg-base-100">
-        <faq-component class="py-24 px-8 max-w-7xl mx-auto"></faq-component>
+        <faq-component id="faq" class="py-24 px-8 max-w-7xl mx-auto"></faq-component>
       </div>
 
       <div class="bg-base-200">
