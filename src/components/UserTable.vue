@@ -57,8 +57,6 @@
             </tr>
           </tbody>
         </table>
-
-        <div v-for="user in selectedUsers" class="border-4 border-primary">{{ user }}</div>
       </div>
     </div>
   </div>
