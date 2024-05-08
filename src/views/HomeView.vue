@@ -20,8 +20,8 @@
   </div>
 </template>
 
-<script setup>
-import FaqComponent from '@/components/Faq.vue'
+<script setup lang="ts">
+import FaqComponent from '@/components/FAQ.vue'
 import Pricing from '@/components/layout/Pricing.vue'
 import Hero from '@/components/layout/Hero.vue'
 import Cta1 from '@/components/layout/Cta1.vue'

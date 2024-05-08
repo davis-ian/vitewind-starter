@@ -99,7 +99,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 const items = [
   { src: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image.jpg' },
   { src: 'https://flowbite.s3.amazonaws.com/docs/gallery/masonry/image1.jpg' },

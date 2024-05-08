@@ -8,13 +8,13 @@
       <div
         class="cursor-pointer"
         @click="toggleAccordionItem(index)"
-        v-for="(question, index) in faqList"
+        v-for="(question, index) in questions"
       >
         <div class="collapse collapse-plus bg-base-200">
           <input type="checkbox" :checked="question.open" />
-          <div class="collapse-title text-xl font-medium">{{ question.q }}</div>
+          <div class="collapse-title text-xl font-medium">{{ question.question }}</div>
           <div class="collapse-content">
-            <p>{{ question.a }}</p>
+            <p>{{ question.answer }}</p>
           </div>
         </div>
       </div>
@@ -22,30 +22,31 @@
   </div>
 </template>
 
-<script lang="ts">
-export default {
-  data() {
-    return {
-      faqList: [
-        { q: 'Click to open this one and close others', a: 'hello', open: false },
-        { q: 'Click to open this one and close others', a: 'hello', open: false },
-        { q: 'Click to open this one and close others', a: 'hello', open: false },
-        { q: 'Click to open this one and close others', a: 'hello', open: false }
-      ]
-    }
-  },
-  methods: {
-    toggleAccordionItem(index) {
-      for (let i = 0; i < this.faqList.length; i++) {
-        let question = this.faqList[i]
+<script setup lang="ts">
+import { ref, reactive, toRefs } from 'vue'
 
-        if (i == index) {
-          question.open = !question.open
-        } else {
-          question.open = false
-        }
-      }
+import type { FAQ } from '@/types/FAQ'
+
+const state = reactive<{ questions: FAQ[] }>({
+  questions: [
+    { question: 'Click to open this one and close others', answer: 'hello', open: false },
+    { question: 'Click to open this one and close others', answer: 'hello', open: false },
+    { question: 'Click to open this one and close others', answer: 'hello', open: false },
+    { question: 'Click to open this one and close others', answer: 'hello', open: false }
+  ]
+})
+
+const toggleAccordionItem = (index: number) => {
+  for (let i = 0; i < state.questions.length; i++) {
+    let question = state.questions[i]
+
+    if (i == index) {
+      question.open = !question.open
+    } else {
+      question.open = false
     }
   }
 }
+
+const { questions } = toRefs(state)
 </script>
