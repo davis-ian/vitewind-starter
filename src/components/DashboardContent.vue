@@ -20,7 +20,7 @@
       <!-- END: Row2 -->
 
       <!-- START: Row 3 -->
-      <DataTable class="col-span-3" :headers="headers" :items="items">
+      <!-- <DataTable class="col-span-3" :headers="headers" :items="items">
         <template #header.age="{ item }">
           <span>Years Old</span>
         </template>
@@ -28,7 +28,7 @@
         <template #item.age="{ item }">
           <span>{{ item.age }} years old</span>
         </template>
-      </DataTable>
+      </DataTable> -->
       <!-- END: Row 3 -->
     </div>
   </div>

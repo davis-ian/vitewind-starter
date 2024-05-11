@@ -1,6 +1,15 @@
 <template>
   <div>
-    <DataTable selectable :headers="headers" :items="users">
+    <div class="border-4 border-primary">
+      {{ options }}
+    </div>
+    <DataTable
+      selectable
+      loading
+      :headers="headers"
+      :items="users"
+      :options="options"
+    >
       <template #item.name="{ item }">
         <div class="flex items-center gap-3">
           <div class="avatar">
@@ -40,6 +49,7 @@
 <script setup lang="ts">
 import { reactive, toRefs, computed, watch } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
+import type { DataTableOptions } from '@/types/DataTableOptions';
 
 const headers = [
   { text: 'Name', value: 'name' },
@@ -49,6 +59,10 @@ const headers = [
 ];
 
 const state = reactive({
+  options: {
+    page: 1,
+    itemsPerPage: 5
+  } as DataTableOptions,
   users: [
     {
       firstName: 'Hart',
@@ -93,6 +107,193 @@ const state = reactive({
         'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
       selected: false,
       team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
+    },
+    {
+      firstName: 'Yancy',
+      lastName: 'Tear',
+      country: 'Brazil',
+      job: 'Community Outreach Specialist',
+      favoriteColor: 'Indigo',
+      profileImage:
+        'https://img.daisyui.com/tailwind-css-component-profile-5@56w.png',
+      selected: false,
+      team: ['Wyman-Ledner']
     }
   ],
   allUsersSelected: false
@@ -120,6 +321,6 @@ const toggleAllUsers = () => {
   });
 };
 
-const { users, allUsersSelected } = toRefs(state);
+const { users, allUsersSelected, options } = toRefs(state);
 </script>
 <style></style>

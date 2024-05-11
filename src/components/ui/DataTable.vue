@@ -30,6 +30,7 @@
           </thead>
           <tbody>
             <!-- rows  -->
+
             <tr
               v-for="(item, index) in paginatedItems"
               :key="index"
@@ -63,6 +64,7 @@
             Previous
           </button>
           <span>Page {{ currentPage }} of {{ totalPages }}</span>
+          <span>Total Items {{ totalItems }}</span>
           <button
             class="btn btn-ghost btn-sm"
             @click="nextPage"
@@ -71,13 +73,15 @@
             Next
           </button>
         </div>
+        <div class="border-4 border-red-500">{{ localOptions }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, computed, watch } from 'vue';
+import { reactive, toRefs, computed, watch, ref } from 'vue';
+import type { DataTableOptions } from '@/types/DataTableOptions';
 
 interface Header {
   text: string;
@@ -93,7 +97,9 @@ interface Item {
 const props = defineProps<{
   headers: Header[];
   items: Item[];
-  itemsPerPage?: number;
+  // itemsPerPage?: number;
+  options: DataTableOptions;
+  totalItems?: number;
   selectable?: boolean;
   zebra?: boolean;
   pinRows?: boolean;
@@ -101,7 +107,23 @@ const props = defineProps<{
   highlightOnHover?: boolean;
   size?: string;
   hideFooter?: boolean;
+  loading?: boolean;
+  serverItemsLength?: number;
 }>();
+
+const emit = defineEmits<{
+  (e: 'update:options', value: DataTableOptions): void;
+}>();
+
+const localOptions = ref<DataTableOptions>({ ...props.options });
+
+watch(
+  localOptions,
+  (newOptions) => {
+    emit('update:options', newOptions);
+  },
+  { deep: true }
+);
 
 const state = reactive({
   allItemsSelected: false,
@@ -112,17 +134,22 @@ const defaultItemsPerPage = 10;
 
 const paginatedItems = computed(() => {
   const start =
-    (state.currentPage - 1) * (props.itemsPerPage || defaultItemsPerPage);
+    (state.currentPage - 1) *
+    (props.options.itemsPerPage || defaultItemsPerPage);
   return props.items.slice(
     start,
-    start + (props.itemsPerPage || defaultItemsPerPage)
+    start + (props.options.itemsPerPage || defaultItemsPerPage)
   );
 });
 
 const totalPages = computed(() => {
   return Math.ceil(
-    props.items.length / (props.itemsPerPage || defaultItemsPerPage)
+    props.items.length / (props.options.itemsPerPage || defaultItemsPerPage)
   );
+});
+
+const totalItems = computed(() => {
+  return props.serverItemsLength || props.items.length;
 });
 
 const selectedItems = computed(() => {
@@ -136,8 +163,6 @@ const tableClassModifiers = computed(() => {
   if (props.pinRows) classMods.push('table-pin-rows');
   if (props.zebra) classMods.push('table-zebra');
   if (props.size) classMods.push(`table-${props.size}`);
-
-  console.log(classMods, classMods);
   return classMods;
 });
 
@@ -164,19 +189,15 @@ const toggleAllItems = () => {
   });
 };
 
-const updateAllItemsSelected = () => {
-  state.allItemsSelected = props.items.length === selectedItems.value.length;
-};
-
 const prevPage = () => {
-  if (state.currentPage > 1) {
-    state.currentPage--;
+  if (localOptions.value.page > 1) {
+    localOptions.value.page--;
   }
 };
 
 const nextPage = () => {
-  if (state.currentPage < totalPages.value) {
-    state.currentPage++;
+  if (localOptions.value.page < totalPages.value) {
+    localOptions.value.page++;
   }
 };
 
