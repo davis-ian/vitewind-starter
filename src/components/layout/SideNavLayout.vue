@@ -2,16 +2,18 @@
   <div>
     <div class="drawer lg:drawer-open">
       <input id="my-drawer" type="checkbox" class="drawer-toggle" />
-      <div class="drawer-content nav-max-h min-h-full">
+      <div class="nav-max-h drawer-content min-h-full">
         <!-- Page content here -->
-        <label for="my-drawer" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
+        <label for="my-drawer" class="btn btn-primary drawer-button lg:hidden"
+          >Open drawer</label
+        >
 
         <slot name="page-content"></slot>
       </div>
 
-      <div class="drawer-side overflow-y-auto min-h-full nav-max-h">
+      <div class="nav-max-h drawer-side min-h-full overflow-y-auto">
         <label for="my-drawer" class="drawer-overlay" />
-        <ul class="menu w-80 p-4 bg-base-100 min-h-full">
+        <ul class="menu min-h-full w-80 p-4">
           <!-- Sidebar Content here -->
           <slot name="nav-content"></slot>
         </ul>

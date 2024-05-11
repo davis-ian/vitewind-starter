@@ -1,6 +1,6 @@
 <template>
   <div>
-    <side-nav-layout>
+    <side-nav-layout class="bg-base-300">
       <template v-slot:page-content>
         <dashboard-content />
       </template>
@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import DashboardContent from '@/components/DashboardContent.vue'
-import SideNavLayout from '@/components/layout/SideNavLayout.vue'
+import DashboardContent from '@/components/DashboardContent.vue';
+import SideNavLayout from '@/components/layout/SideNavLayout.vue';
 </script>
 
 <style></style>

@@ -6,6 +6,6 @@ export default {
   },
   plugins: [require('@tailwindcss/typography'), require('daisyui')],
   daisyui: {
-    themes: ['light', 'dark', 'cyberpunk', 'forest']
+    themes: ['light', 'dark', 'cyberpunk', 'forest', 'lofi']
   }
-}
+};
