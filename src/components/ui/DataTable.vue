@@ -18,7 +18,7 @@
                     </slot>
                   </label>
                 </th>
-                <th v-for="header in headers" :key="header.text">
+                <th v-for="header in headers" :key="header.value">
                   <label>
                     <slot :name="`header.${header.value}`" :item="header">
                       {{ header.text }}
@@ -28,7 +28,23 @@
               </slot>
             </tr>
           </thead>
-          <tbody>
+
+          <tbody v-if="props.loading">
+            <tr>
+              <td
+                :colspan="selectable ? headers.length + 1 : headers.length"
+                class="p-0"
+              >
+                <slot name="loading">
+                  <progress class="progress progress-primary w-full"></progress>
+                  <div class="flex justify-center">
+                    <span>Loading...</span>
+                  </div>
+                </slot>
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
             <!-- rows  -->
 
             <tr
@@ -46,7 +62,7 @@
                 </label>
               </th>
 
-              <th v-for="header in headers">
+              <th v-for="header in headers" :key="header.value">
                 <slot :name="`item.${header.value}`" :item="item">
                   {{ item[header.value] }}
                 </slot>
@@ -55,32 +71,72 @@
           </tbody>
         </table>
         <!-- pagination -->
-        <div v-if="!hideFooter" class="mt-4 flex items-center justify-between">
+
+        <div
+          v-if="!hideFooter"
+          class="flex justify-end gap-2 border-t border-base-200 pt-4"
+        >
+          <div class="flex items-center">
+            <span
+              >{{ pageIndexStart }} - {{ pageIndexEnd }} of {{ totalItems }}
+            </span>
+          </div>
+          <select
+            v-model="localOptions.itemsPerPage"
+            class="select select-bordered select-sm w-full max-w-20"
+          >
+            <option
+              v-for="(selection, index) in computedItemsPerPageOptions"
+              :key="index"
+              :value="selection"
+            >
+              {{ selection }}
+            </option>
+          </select>
+          <button
+            class="btn btn-ghost btn-sm"
+            @click="firstPage"
+            :disabled="options.page === 1"
+          >
+            <font-awesome-icon
+              icon="fa-solid fa-angles-left"
+            ></font-awesome-icon>
+          </button>
           <button
             class="btn btn-ghost btn-sm"
             @click="prevPage"
-            :disabled="currentPage === 1"
+            :disabled="options.page === 1"
           >
-            Previous
+            <font-awesome-icon
+              icon="fa-solid fa-angle-left"
+            ></font-awesome-icon>
           </button>
-          <span>Page {{ currentPage }} of {{ totalPages }}</span>
-          <span>Total Items {{ totalItems }}</span>
           <button
             class="btn btn-ghost btn-sm"
             @click="nextPage"
-            :disabled="currentPage === totalPages"
+            :disabled="options.page === totalPages"
           >
-            Next
+            <font-awesome-icon
+              icon="fa-solid fa-angle-right"
+            ></font-awesome-icon>
+          </button>
+          <button
+            class="btn btn-ghost btn-sm"
+            @click="lastPage"
+            :disabled="options.page === totalPages"
+          >
+            <font-awesome-icon
+              icon="fa-solid fa-angles-right"
+            ></font-awesome-icon>
           </button>
         </div>
-        <div class="border-4 border-red-500">{{ localOptions }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, toRefs, computed, watch, ref } from 'vue';
+import { reactive, computed, watch, ref } from 'vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
 
 interface Header {
@@ -97,8 +153,8 @@ interface Item {
 const props = defineProps<{
   headers: Header[];
   items: Item[];
-  // itemsPerPage?: number;
   options: DataTableOptions;
+  itemsPerPageOptions?: number[];
   totalItems?: number;
   selectable?: boolean;
   zebra?: boolean;
@@ -115,26 +171,26 @@ const emit = defineEmits<{
   (e: 'update:options', value: DataTableOptions): void;
 }>();
 
-const localOptions = ref<DataTableOptions>({ ...props.options });
+const localOptions = ref<DataTableOptions>(props.options);
 
 watch(
   localOptions,
   (newOptions) => {
+    // console.log(newOptions, 'new local option');
     emit('update:options', newOptions);
   },
   { deep: true }
 );
 
 const state = reactive({
-  allItemsSelected: false,
-  currentPage: 1
+  allItemsSelected: false
 });
 
 const defaultItemsPerPage = 10;
 
 const paginatedItems = computed(() => {
   const start =
-    (state.currentPage - 1) *
+    (props.options.page - 1) *
     (props.options.itemsPerPage || defaultItemsPerPage);
   return props.items.slice(
     start,
@@ -145,6 +201,20 @@ const paginatedItems = computed(() => {
 const totalPages = computed(() => {
   return Math.ceil(
     props.items.length / (props.options.itemsPerPage || defaultItemsPerPage)
+  );
+});
+
+const pageIndexStart = computed(() => {
+  return (
+    (props.options.page - 1) *
+      (props.options.itemsPerPage || defaultItemsPerPage) +
+    1
+  );
+});
+
+const pageIndexEnd = computed(() => {
+  return (
+    props.options.page * (props.options.itemsPerPage || defaultItemsPerPage)
   );
 });
 
@@ -201,7 +271,27 @@ const nextPage = () => {
   }
 };
 
-const { allItemsSelected, currentPage } = toRefs(state);
+const firstPage = () => {
+  if (localOptions.value.page > 1) {
+    localOptions.value.page = 1;
+  }
+};
+
+const lastPage = () => {
+  if (localOptions.value.page < totalPages.value) {
+    localOptions.value.page = totalPages.value;
+  }
+};
+
+// Default items per page options
+const defaultItemsPerPageOptions = [5, 10, 15];
+
+// Computed property to use the prop value or the default value
+const computedItemsPerPageOptions = computed(() => {
+  return props.itemsPerPageOptions && props.itemsPerPageOptions.length
+    ? props.itemsPerPageOptions
+    : defaultItemsPerPageOptions;
+});
 </script>
 
 <style scoped>

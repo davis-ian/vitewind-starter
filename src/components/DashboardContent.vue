@@ -11,6 +11,7 @@
       <basic-image-card
         class="col-span-1"
         v-for="i in 3"
+        :key="i"
         :title="`Shoes ${i}!`"
         :body="'Check out these awesome shoes!'"
         :btn-text="'Buy Now'"
@@ -18,18 +19,6 @@
         @btn-click="handleClick"
       ></basic-image-card>
       <!-- END: Row2 -->
-
-      <!-- START: Row 3 -->
-      <!-- <DataTable class="col-span-3" :headers="headers" :items="items">
-        <template #header.age="{ item }">
-          <span>Years Old</span>
-        </template>
-
-        <template #item.age="{ item }">
-          <span>{{ item.age }} years old</span>
-        </template>
-      </DataTable> -->
-      <!-- END: Row 3 -->
     </div>
   </div>
 </template>

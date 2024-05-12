@@ -2,27 +2,28 @@
   <div>
     <div class="text-center">
       <div class="bg-base-100">
-        <hero class="py-24 px-8 mx-auto"></hero>
+        <hero class="mx-auto px-8 py-24"></hero>
       </div>
 
       <div class="bg-base-200">
-        <pricing id="pricing" class="py-24 px-8 mx-auto max-w-5xl"></pricing>
+        <pricing id="pricing" class="mx-auto max-w-5xl px-8 py-24"></pricing>
       </div>
 
       <div class="bg-base-100">
-        <faq-component id="faq" class="py-24 px-8 max-w-7xl mx-auto"></faq-component>
+        <faq-component
+          id="faq"
+          class="mx-auto max-w-7xl px-8 py-24"
+        ></faq-component>
       </div>
 
-      <div class="bg-base-200">
-        <cta1 class="py-24 px-8 mx-auto"></cta1>
-      </div>
+      <div class="bg-base-200"></div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import FaqComponent from '@/components/FAQ.vue'
-import Pricing from '@/components/layout/Pricing.vue'
-import Hero from '@/components/layout/Hero.vue'
-import Cta1 from '@/components/layout/Cta1.vue'
+// import FaqComponent from '@/components/FAQ.vue'
+import Pricing from '@/components/layout/Pricing.vue';
+import Hero from '@/components/layout/Hero.vue';
+import Cta1 from '@/components/layout/Cta1.vue';
 </script>
