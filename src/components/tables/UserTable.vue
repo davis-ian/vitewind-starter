@@ -6,7 +6,7 @@
       :headers="headers"
       :items="users"
       :server-items-length="56"
-      :items-per-page-options="[5, 6, 7]"
+      :items-per-page-options="[5, 10, 15]"
       v-model:options="options"
     >
       <template #item.name="{ item }">
@@ -37,7 +37,7 @@
       </template>
 
       <template #item.details="{ item }">
-        <button @click="openDetails(item)" class="btn btn-ghost btn-xs">
+        <button @click="openDetails(item as User)" class="btn btn-ghost btn-xs">
           details
         </button>
       </template>
@@ -67,20 +67,28 @@
 <script setup lang="ts">
 import { reactive, toRefs, computed, watch, onMounted } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
-import Modal from '@/components/ModalComponent.vue';
+import Modal from '@/components/ui/ModalComponent.vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
 import { useAxios } from '@/composables/useAxios';
 
 const axios = useAxios();
 
+interface Header {
+  sortable: any;
+  text: string;
+  value: string;
+  selectable?: boolean | false;
+}
+
 const headers = [
-  { text: 'Name', value: 'name', sortable: true },
+  { text: 'Name', value: 'name' },
   { text: 'Email', value: 'email' },
   { text: 'Location', value: 'location' },
   { text: 'Details', value: 'details' }
-];
+] as Header[];
 
 interface User {
+  id: string;
   name: {
     first: string;
     last: string;
@@ -95,6 +103,7 @@ interface User {
   login: {
     username: string;
   };
+  selected?: boolean;
 }
 
 const state = reactive({
@@ -106,7 +115,7 @@ const state = reactive({
   users: [] as User[],
   allUsersSelected: false,
   detailsModal: false,
-  selectedUser: null as User
+  selectedUser: null as User | null
 });
 
 const selectedUsers = computed(() => {
@@ -148,10 +157,9 @@ const getUsers = () => {
       }
     })
     .then((response) => {
-      console.log(response, 'faker response');
-      state.users = response.data.results;
-
-      console.log(state.users);
+      state.users = response.data.results.map((user) => {
+        return { ...user, id: user.id.value };
+      });
       state.loading = false;
     });
 };

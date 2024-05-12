@@ -1,6 +1,6 @@
 export interface DataTableOptions {
   page: number;
-  itemsPerPage?: number;
-  sortBy?: string;
-  sortDesc?: boolean;
+  itemsPerPage: number;
+  sortBy?: string | null;
+  sortDesc?: boolean | null;
 }
