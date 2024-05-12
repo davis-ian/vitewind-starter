@@ -306,13 +306,13 @@ const toggleSort = (header: Header) => {
   if (header.value == localOptions.value.sortBy) {
     switch (localOptions.value.sortDesc) {
       case true:
-        localOptions.value.sortDesc = false;
-        break;
-      case false:
         localOptions.value.sortDesc = null;
         break;
-      case null:
+      case false:
         localOptions.value.sortDesc = true;
+        break;
+      case null:
+        localOptions.value.sortDesc = false;
         break;
     }
   } else {
