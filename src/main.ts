@@ -6,6 +6,8 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
+import axiosInstance from './services/axiosConfig';
+
 // FONT AWESOME
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -17,7 +19,10 @@ import {
   faAngleRight,
   faAnglesRight,
   faAngleLeft,
-  faAnglesLeft
+  faAnglesLeft,
+  faArrowDown,
+  faArrowUp,
+  faArrowDownUpAcrossLine
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -27,7 +32,10 @@ library.add(
   faAngleRight,
   faAnglesRight,
   faAngleLeft,
-  faAnglesLeft
+  faAnglesLeft,
+  faArrowDown,
+  faArrowUp,
+  faArrowDownUpAcrossLine
 );
 
 const app = createApp(App);

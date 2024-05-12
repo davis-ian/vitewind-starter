@@ -16,14 +16,17 @@
         ></faq-component>
       </div>
 
-      <div class="bg-base-200"></div>
+      <div class="bg-base-200">
+        <footer-section></footer-section>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import FaqComponent from '@/components/FAQ.vue'
+import FaqComponent from '@/components/Faq.vue';
 import Pricing from '@/components/layout/Pricing.vue';
 import Hero from '@/components/layout/Hero.vue';
 import Cta1 from '@/components/layout/Cta1.vue';
+import FooterSection from '@/components/layout/FooterSection.vue';
 </script>

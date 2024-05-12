@@ -1,6 +1,8 @@
 <template>
   <div class="card card-compact bg-base-100 shadow-xl">
     <div class="card-body">
+      <!-- <div class="border-2 border-accent">{{ options }}</div>
+      <div class="border-2 border-primary">{{ localOptions }}</div> -->
       <div class="overflow-x-auto">
         <table class="table" :class="tableClassModifiers">
           <!-- head -->
@@ -23,28 +25,61 @@
                     <slot :name="`header.${header.value}`" :item="header">
                       {{ header.text }}
                     </slot>
+                    <div v-if="header.sortable">
+                      <div @click="toggleSort(header)">
+                        <div v-if="header.value == localOptions.sortBy">
+                          <font-awesome-icon
+                            v-if="localOptions.sortByDesc == true"
+                            icon="fa-solid fa-arrow-down"
+                          ></font-awesome-icon>
+                          <font-awesome-icon
+                            v-if="localOptions.sortByDesc == false"
+                            icon="fa-solid fa-arrow-up"
+                          ></font-awesome-icon>
+                          <font-awesome-icon
+                            v-if="localOptions.sortByDesc == desc"
+                            icon="fa-solid fa-arrow-down-up-across-line"
+                          ></font-awesome-icon>
+                        </div>
+                        <div v-else>
+                          <font-awesome-icon
+                            icon="fa-solid fa-arrow-down-up-across-line"
+                          ></font-awesome-icon>
+                        </div>
+                        <!-- <font-awesome-icon
+                          v-if="
+                            localOptions.sortByDesc &&
+                            localOptions.sortBy == header.value
+                          "
+                          icon="fa-solid  fa-arrow-down"
+                        ></font-awesome-icon>
+                        <font-awesome-icon
+                          v-else
+                          icon="fa-solid  fa-arrow-up"
+                        ></font-awesome-icon> -->
+                      </div>
+                    </div>
                   </label>
                 </th>
               </slot>
             </tr>
           </thead>
 
-          <tbody v-if="props.loading">
-            <tr>
-              <td
-                :colspan="selectable ? headers.length + 1 : headers.length"
-                class="p-0"
-              >
-                <slot name="loading">
-                  <progress class="progress progress-primary w-full"></progress>
-                  <div class="flex justify-center">
-                    <span>Loading...</span>
-                  </div>
-                </slot>
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
+          <tr v-if="props.loading">
+            <td
+              :colspan="selectable ? headers.length + 1 : headers.length"
+              class="p-0"
+            >
+              <slot name="loading">
+                <progress class="progress progress-primary w-full"></progress>
+                <div class="flex justify-center">
+                  <span>Loading...</span>
+                </div>
+              </slot>
+            </td>
+          </tr>
+
+          <tbody>
             <!-- rows  -->
 
             <tr
@@ -171,12 +206,20 @@ const emit = defineEmits<{
   (e: 'update:options', value: DataTableOptions): void;
 }>();
 
-const localOptions = ref<DataTableOptions>(props.options);
+const defaultItemsPerPage = 10;
+const defaultSortBy = 'id';
+
+const localOptions = ref<DataTableOptions>({
+  ...props.options,
+  itemsPerPage: props.options.itemsPerPage ?? defaultItemsPerPage,
+  // sortByDesc: props.options.sortByDesc ?? defaultSortByDesc,
+  sortByDesc: props.options.sortByDesc ?? null,
+  sortBy: props.options.sortBy ?? defaultSortBy
+});
 
 watch(
   localOptions,
   (newOptions) => {
-    // console.log(newOptions, 'new local option');
     emit('update:options', newOptions);
   },
   { deep: true }
@@ -186,36 +229,27 @@ const state = reactive({
   allItemsSelected: false
 });
 
-const defaultItemsPerPage = 10;
-
 const paginatedItems = computed(() => {
-  const start =
-    (props.options.page - 1) *
-    (props.options.itemsPerPage || defaultItemsPerPage);
-  return props.items.slice(
-    start,
-    start + (props.options.itemsPerPage || defaultItemsPerPage)
-  );
+  if (props.serverItemsLength > props.items.length) {
+    return props.items;
+  } else {
+    const start = (props.options.page - 1) * props.options.itemsPerPage;
+    return props.items.slice(start, start + props.options.itemsPerPage);
+  }
 });
 
 const totalPages = computed(() => {
   return Math.ceil(
-    props.items.length / (props.options.itemsPerPage || defaultItemsPerPage)
+    (props.serverItemsLength || props.items.length) / props.options.itemsPerPage
   );
 });
 
 const pageIndexStart = computed(() => {
-  return (
-    (props.options.page - 1) *
-      (props.options.itemsPerPage || defaultItemsPerPage) +
-    1
-  );
+  return (props.options.page - 1) * props.options.itemsPerPage + 1;
 });
 
 const pageIndexEnd = computed(() => {
-  return (
-    props.options.page * (props.options.itemsPerPage || defaultItemsPerPage)
-  );
+  return props.options.page * props.options.itemsPerPage;
 });
 
 const totalItems = computed(() => {
@@ -292,6 +326,26 @@ const computedItemsPerPageOptions = computed(() => {
     ? props.itemsPerPageOptions
     : defaultItemsPerPageOptions;
 });
+
+const toggleSort = (header: Header) => {
+  //Toggle sortByDesc Value
+  if (header.value == localOptions.value.sortBy) {
+    switch (localOptions.value.sortByDesc) {
+      case true:
+        localOptions.value.sortByDesc = false;
+        break;
+      case false:
+        localOptions.value.sortByDesc = null;
+        break;
+      case null:
+        localOptions.value.sortByDesc = true;
+        break;
+    }
+  } else {
+    localOptions.value.sortBy = header.value;
+    localOptions.value.sortByDesc = true;
+  }
+};
 </script>
 
 <style scoped>

@@ -12,6 +12,18 @@ html {
   scroll-behavior: smooth;
 }
 
+/* DaisyUI modal scrollbar style override */
+:root:has(
+    :is(
+        .modal-open,
+        .modal:target,
+        .modal-toggle:checked + .modal,
+        .modal[open]
+      )
+  ) {
+  scrollbar-gutter: auto !important;
+}
+
 ::selection {
   background-color: theme('colors.primary'); /* Use Tailwind's primary color */
   color: white; /* Adjust text color for good contrast */
