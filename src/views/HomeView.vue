@@ -17,6 +17,9 @@
       </div>
 
       <div class="bg-base-200">
+        <cta1 class="mx-auto max-w-7xl px-8 py-24"></cta1>
+      </div>
+      <div class="bg-base-100">
         <footer-section></footer-section>
       </div>
     </div>

@@ -8,8 +8,9 @@
     <a v-if="$route.path == '/'" href="#pricing">Pricing</a>
     <a v-if="$route.path == '/'" href="#faq">FAQ</a>
 
-    <a v-if="$route.path == '/'" href="/dashboard">Login</a>
-    <a v-if="$route.path != '/'" href="/">Logout</a>
+    <a v-if="$route.path == '/'" href="/dashboard">Dashboard</a>
+    <a href="/login">Login</a>
+    <a v-if="$route.path != '/'" href="/">Home</a>
   </div>
 
   <main>
