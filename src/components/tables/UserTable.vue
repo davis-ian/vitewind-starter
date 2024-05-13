@@ -69,9 +69,7 @@ import { reactive, toRefs, computed, watch, onMounted } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
 import Modal from '@/components/ui/ModalComponent.vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
-import { useAxios } from '@/composables/useAxios';
-
-const axios = useAxios();
+import axiosInstance from '@/services/axiosConfig';
 
 interface Header {
   sortable: any;
@@ -148,7 +146,7 @@ const openDetails = (user: User) => {
 
 const getUsers = () => {
   state.loading = true;
-  axios
+  axiosInstance
     .get('https://randomuser.me/api/', {
       params: {
         seed: 'abc',

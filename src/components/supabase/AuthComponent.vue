@@ -1,32 +1,34 @@
 <template>
-  <form class="row flex-center flex" @submit.prevent="handleLogin">
-    <div class="col-6 form-widget">
-      <h1 class="header">Supabase + Vue 3</h1>
-      <p class="description">Sign in via magic link with your email below</p>
-      <div>
-        <input
-          class="inputField"
-          required
-          type="email"
-          placeholder="Your email"
-          v-model="email"
-        />
+  <div>
+    <form @submit.prevent="handleLogin">
+      <div class="flex flex-col items-center gap-4">
+        <h1 class="text-bold text-3xl">Supabase + Vue 3</h1>
+        <p class="">Sign in via magic link with your email below</p>
+        <div>
+          <input
+            class="input input-bordered w-full max-w-xs"
+            required
+            type="email"
+            placeholder="Your email"
+            v-model="email"
+          />
+        </div>
+        <div>
+          <input
+            type="submit"
+            class="btn btn-primary"
+            :value="loading ? 'Loading' : 'Send magic link'"
+            :disabled="loading"
+          />
+        </div>
       </div>
-      <div>
-        <input
-          type="submit"
-          class="button block"
-          :value="loading ? 'Loading' : 'Send magic link'"
-          :disabled="loading"
-        />
-      </div>
-    </div>
-  </form>
+    </form>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { supabase } from '@/composables/supabase';
+import { supabase } from '@/services/supabase';
 
 const loading = ref(false);
 const email = ref('');
@@ -38,7 +40,8 @@ const handleLogin = async () => {
       email: email.value
     });
 
-    if (error) throw erroralert('Check your email for the login link!');
+    if (error) throw error;
+    alert('Check your email for the login link!');
   } catch (error) {
     if (error instanceof Error) alert(error.message);
   } finally {

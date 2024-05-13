@@ -17,9 +17,7 @@
 import { reactive, toRefs, computed, watch, onMounted } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
-import { useAxios } from '@/composables/useAxios';
-
-const axios = useAxios();
+import axiosInstance from '@/services/axiosConfig';
 
 const headers = [
   { text: 'Id', value: 'id', sortable: true },
@@ -53,7 +51,7 @@ const getAlbums = () => {
   }
 
   state.loading = true;
-  axios
+  axiosInstance
     .get(`https://jsonplaceholder.typicode.com/todos${paramString}`, {
       params: {}
     })

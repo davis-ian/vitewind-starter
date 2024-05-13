@@ -1,0 +1,170 @@
+<template>
+  <div>
+    <div>
+      <div v-if="loading" class="px-4">
+        <progress class="progress progress-primary"></progress>
+      </div>
+    </div>
+
+    <div class="flex justify-center">
+      <form
+        class="form-widget flex max-w-xl flex-grow flex-col gap-4"
+        @submit.prevent="updateProfile"
+      >
+        <div class="flex flex-col">
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="text"
+            class="input input-bordered w-full"
+            :value="profile?.email"
+            disabled
+          />
+        </div>
+        <div class="flex flex-col">
+          <label for="username">Username</label>
+          <input
+            id="username"
+            type="text"
+            class="input input-bordered w-full"
+            v-model="username"
+          />
+        </div>
+        <!-- <div class="flex flex-col">
+          <label for="website">Website</label>
+          <input
+            id="website"
+            type="url"
+            class="input input-bordered w-full"
+            v-model="website"
+          />
+        </div> -->
+
+        <div class="flex flex-col gap-4">
+          <input
+            type="submit"
+            class="btn btn-primary"
+            :value="loading ? 'Loading ...' : 'Update'"
+            :disabled="loading"
+          />
+
+          <button
+            class="btn btn-outline btn-primary"
+            @click="signOut"
+            :disabled="loading"
+          >
+            Sign Out
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { supabase } from '@/services/supabase';
+import { onMounted, ref } from 'vue';
+import { type User, type Session } from '@supabase/supabase-js';
+import { useRouter } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
+const authStore = useAuthStore();
+
+interface Profile {
+  id: string;
+  updated_at: string | null;
+  username?: string | null;
+  full_name?: string | null;
+  avatar_url?: string | null;
+  website?: string | null;
+}
+
+// const props = defineProps<{ session: Session }>();
+const loading = ref<boolean>(true);
+const profile = ref<User | null>(null);
+
+const username = ref<string>('');
+const website = ref<string>('');
+const avatar_url = ref<string>('');
+
+onMounted(async () => {
+  await getProfile();
+});
+
+async function getProfile() {
+  try {
+    const user = authStore.user;
+
+    profile.value = user;
+
+    let { data, error, status } = await supabase
+      .from('profiles')
+      .select(`username, website, avatar_url`)
+      .eq('id', user?.id)
+      .single();
+
+    if (error && status !== 406) throw error;
+
+    if (data) {
+      console.log(data, 'user data thing');
+      username.value = data.username;
+      website.value = data.website;
+      avatar_url.value = data.avatar_url;
+    }
+  } catch (error) {
+    alert((error as Error).message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+async function updateProfile() {
+  console.log('update profile');
+  try {
+    loading.value = true;
+    const user = authStore.user;
+
+    if (user === null) {
+      throw new Error('User cannot be null');
+    }
+
+    const updates: Profile = {
+      id: user.id,
+      username: username.value,
+      avatar_url: avatar_url.value,
+      updated_at: new Date().toISOString()
+    };
+
+    console.log(updates, 'Updates');
+    const { error } = await supabase.from('profiles').upsert(updates);
+
+    if (error) throw error;
+  } catch (error) {
+    alert((error as Error).message);
+  } finally {
+    loading.value = false;
+  }
+}
+
+const router = useRouter();
+async function signOut() {
+  try {
+    loading.value = true;
+    const { error } = await supabase.auth.signOut();
+
+    profile.value = null;
+    username.value = '';
+    website.value = '';
+    avatar_url.value = '';
+
+    authStore.signOut();
+
+    router.push({ name: 'Login' });
+
+    if (error) throw error;
+  } catch (error) {
+    alert((error as Error).message);
+  } finally {
+    loading.value = false;
+  }
+}
+</script>

@@ -1,7 +1,6 @@
 <template>
-  <div>
-    <h1 class="text-4xl">Login</h1>
-    <CardComponent>
+  <div class="flex flex-col items-center justify-center">
+    <CardComponent class="bg-primary-content">
       <AuthComponent></AuthComponent>
     </CardComponent>
   </div>
