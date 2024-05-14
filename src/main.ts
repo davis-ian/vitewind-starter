@@ -6,7 +6,7 @@ import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router';
 
-import axiosInstance from './services/axiosConfig';
+import axiosInstance from './services/axiosInstance';
 
 // FONT AWESOME
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';

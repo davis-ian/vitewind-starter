@@ -13,8 +13,10 @@
       </p>
     </div>
     <div>
+      <p>{{ avatar_url }}</p>
+      <img v-if="avatar_url" :src="avatar_url" alt="Avatar Image" />
       <form
-        class="form-widget flex max-w-xl flex-col gap-4"
+        class="form-widget flex flex-col gap-4"
         @submit.prevent="updateProfile"
       >
         <div class="flex flex-col">
@@ -132,8 +134,18 @@ async function getProfile() {
   }
 }
 
+const updateAvatar = async (url: string) => {
+  if (!url) return;
+
+  avatar_url.value = url;
+
+  await updateProfile();
+};
+
+defineExpose({ updateAvatar });
+
 async function updateProfile() {
-  console.log('update profile');
+  console.log('updating profile');
   try {
     loading.value = true;
     const user = authStore.user;

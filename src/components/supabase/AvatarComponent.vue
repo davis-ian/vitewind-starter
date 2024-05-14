@@ -33,7 +33,6 @@
 
 <script setup lang="ts">
 import { ref, toRefs, watch, defineEmits, defineProps, type Ref } from 'vue';
-import { useAuthStore } from '@/stores/auth';
 import { supabase } from '@/services/supabase';
 import HamburgerBtn from '@/components/ui/HamburgerBtn.vue';
 

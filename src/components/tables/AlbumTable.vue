@@ -17,7 +17,7 @@
 import { reactive, toRefs, computed, watch, onMounted } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
-import axiosInstance from '@/services/axiosConfig';
+import axiosInstance from '@/services/axiosInstance';
 
 const headers = [
   { text: 'Id', value: 'id', sortable: true },

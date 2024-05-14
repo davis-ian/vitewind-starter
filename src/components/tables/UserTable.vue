@@ -69,7 +69,7 @@ import { reactive, toRefs, computed, watch, onMounted } from 'vue';
 import DataTable from '@/components/ui/DataTable.vue';
 import Modal from '@/components/ui/ModalComponent.vue';
 import type { DataTableOptions } from '@/types/DataTableOptions';
-import axiosInstance from '@/services/axiosConfig';
+import axiosInstance from '@/services/axiosInstance';
 
 interface Header {
   sortable: any;
