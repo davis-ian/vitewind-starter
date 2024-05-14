@@ -6,9 +6,15 @@
       </div>
     </div>
 
-    <div class="flex justify-center">
+    <div>
+      <p v-if="profile?.last_sign_in_at">
+        Last Sign In:
+        {{ formatDate(profile?.last_sign_in_at) }}
+      </p>
+    </div>
+    <div>
       <form
-        class="form-widget flex max-w-xl flex-grow flex-col gap-4"
+        class="form-widget flex max-w-xl flex-col gap-4"
         @submit.prevent="updateProfile"
       >
         <div class="flex flex-col">
@@ -89,6 +95,15 @@ const avatar_url = ref<string>('');
 onMounted(async () => {
   await getProfile();
 });
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  }).format(date);
+};
 
 async function getProfile() {
   try {

@@ -40,6 +40,12 @@ export const useAuthStore = defineStore('auth', () => {
     loading.value = false;
   };
 
+  const initializeAuthListener = () => {
+    supabase.auth.onAuthStateChange((event, session) => {
+      user.value = session?.user || null;
+    });
+  };
+
   const isAuthenticated = computed(() => user.value !== null);
 
   return {
@@ -48,6 +54,7 @@ export const useAuthStore = defineStore('auth', () => {
     fetchUser,
     signIn,
     signOut,
-    isAuthenticated
+    isAuthenticated,
+    initializeAuthListener
   };
 });

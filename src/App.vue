@@ -15,7 +15,6 @@
       <a v-if="!authStore.isAuthenticated" href="/login">Login</a>
     </div>
 
-    <div class="border-2 border-primary">{{ authStore.user }}</div>
     <main class="flex flex-grow">
       <RouterView class="flex-grow" />
     </main>
@@ -31,6 +30,7 @@ const authStore = useAuthStore();
 
 onMounted(() => {
   authStore.fetchUser();
+  authStore.initializeAuthListener();
 });
 
 console.log(authStore, 'auth store');
