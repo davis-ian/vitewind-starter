@@ -27,6 +27,7 @@
         id="single"
       />
     </div>
+    <HamburgerBtn @open="handleOpen" @close="handleClose"></HamburgerBtn>
   </div>
 </template>
 
@@ -34,12 +35,20 @@
 import { ref, toRefs, watch, defineEmits, defineProps, type Ref } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { supabase } from '@/services/supabase';
+import HamburgerBtn from '@/components/ui/HamburgerBtn.vue';
 
 const props = defineProps<{
   path: string;
   size: string;
 }>();
 const { path, size } = toRefs(props);
+
+const handleOpen = () => {
+  console.log('open heard');
+};
+const handleClose = () => {
+  console.log('close heard');
+};
 
 const emit = defineEmits<{
   (e: 'upload'): void;
