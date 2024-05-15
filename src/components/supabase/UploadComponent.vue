@@ -9,12 +9,26 @@
     />
 
     <ModalComponent v-model="previewModal">
-      <h3 class="text-bold text-2xl">Upload Preview</h3>
-      <img v-if="previewUrl" :src="previewUrl" alt="Upload Preview" />
+      <h3 class="text-bold mb-4 text-2xl">Upload Preview</h3>
+
+      <img
+        class="max-h-lg max-w-lg"
+        v-if="previewUrl"
+        :src="previewUrl"
+        alt="Upload Preview"
+      />
 
       <template #actions>
-        <button @click="resetUploader" class="btn">Cancel</button>
-        <button @click="initUpload" class="btn btn-primary">Upload</button>
+        <div class="flex justify-between">
+          <button @click="resetUploader" class="btn">Cancel</button>
+          <button
+            @click="initUpload"
+            :disabled="loading"
+            class="btn btn-primary"
+          >
+            Upload
+          </button>
+        </div>
       </template>
     </ModalComponent>
   </div>
@@ -77,8 +91,8 @@ const initUpload = async () => {
       throw new Error('Failed to get public URL');
     }
 
-    resetUploader();
     emit('success', publicUrl);
+    resetUploader();
   } catch (error) {
     console.log(error);
     emit('error', error instanceof Error ? error : new Error('Unknown error'));

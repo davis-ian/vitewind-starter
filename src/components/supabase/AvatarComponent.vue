@@ -70,34 +70,32 @@ const initAvatarPreview = (e) => {
   src.value = URL.createObjectURL(file);
 };
 
-const uploadAvatar = async (e) => {
-  alert('Please try again later');
-  return;
-  // try {
-  //   loading.value = true;
+const uploadAvatar = async () => {
+  try {
+    loading.value = true;
 
-  //   if (!files.value.length) {
-  //     throw new Error('No files selected');
-  //   }
+    if (!files.value.length) {
+      throw new Error('No files selected');
+    }
 
-  //   const file = files.value[0];
-  //   const fileExt = file.name.split('.').pop();
-  //   const filePath = `${Math.random()}.${fileExt}`;
+    const file = files.value[0];
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${Math.random()}.${fileExt}`;
 
-  //   const { error: uploadError } = await supabase.storage
-  //     .from('avatars')
-  //     .upload(filePath, file);
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file);
 
-  //   if (uploadError) throw uploadError;
-  //   emit('update:path', filePath);
-  //   emit('upload');
+    if (uploadError) throw uploadError;
+    emit('update:path', filePath);
+    emit('upload');
 
-  //   console.log('upload success');
-  // } catch (error) {
-  //   console.log(error, 'error uploading avatar');
-  // } finally {
-  //   loading.value = false;
-  // }
+    console.log('upload success');
+  } catch (error) {
+    console.log(error, 'error uploading avatar');
+  } finally {
+    loading.value = false;
+  }
 };
 
 const downloadImage = async () => {

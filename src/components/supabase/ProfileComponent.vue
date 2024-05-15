@@ -13,8 +13,18 @@
       </p>
     </div>
     <div>
-      <p>{{ avatar_url }}</p>
-      <img v-if="avatar_url" :src="avatar_url" alt="Avatar Image" />
+      <img
+        class="max-h-xs max-w-xs"
+        v-if="avatar_url"
+        :src="avatar_url"
+        alt="Avatar Image"
+      />
+
+      <UploadComponent
+        @success="updateAvatar"
+        @error="handleUploadError"
+        bucket-name="avatars"
+      ></UploadComponent>
       <form
         class="form-widget flex flex-col gap-4"
         @submit.prevent="updateProfile"
@@ -75,6 +85,7 @@ import { onMounted, ref } from 'vue';
 import { type User, type Session } from '@supabase/supabase-js';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
+import UploadComponent from '@/components/supabase/UploadComponent.vue';
 const authStore = useAuthStore();
 
 interface Profile {
@@ -94,8 +105,13 @@ const username = ref<string>('');
 const website = ref<string>('');
 const avatar_url = ref<string>('');
 
+const handleUploadError = (error: Error) => {
+  alert('Error uploading image');
+};
+
 onMounted(async () => {
   await getProfile();
+  getPublicUrl();
 });
 
 const formatDate = (dateString: string) => {
@@ -126,6 +142,8 @@ async function getProfile() {
       username.value = data.username;
       website.value = data.website;
       avatar_url.value = data.avatar_url;
+
+      console.log(data, 'user data');
     }
   } catch (error) {
     alert((error as Error).message);
@@ -134,6 +152,20 @@ async function getProfile() {
   }
 }
 
+const getPublicUrl = () => {
+  const fileName = '1715689370866-images-1.png';
+
+  const {
+    data: { publicUrl }
+  } = supabase.storage.from('avatars').getPublicUrl(fileName);
+
+  if (!publicUrl) {
+    throw new Error('Failed to get public URL');
+  }
+
+  console.log(publicUrl, 'public url');
+};
+
 const updateAvatar = async (url: string) => {
   if (!url) return;
 
@@ -141,8 +173,6 @@ const updateAvatar = async (url: string) => {
 
   await updateProfile();
 };
-
-defineExpose({ updateAvatar });
 
 async function updateProfile() {
   console.log('updating profile');

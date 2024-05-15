@@ -27,7 +27,7 @@
 </template>
 
 <script setup lang="ts">
-import FaqComponent from '@/components/Faq.vue';
+// import FaqComponent from '@/components/Faq.vue';
 import Pricing from '@/components/layout/Pricing.vue';
 import Hero from '@/components/layout/Hero.vue';
 import Cta1 from '@/components/layout/Cta1.vue';
