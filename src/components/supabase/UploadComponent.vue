@@ -1,7 +1,7 @@
 <template>
   <div>
-    <p>Upload Component</p>
     <input
+      ref="fileInput"
       type="file"
       class="file-input file-input-bordered file-input-primary"
       @change="onFileChange"
@@ -26,6 +26,7 @@
             :disabled="loading"
             class="btn btn-primary"
           >
+            <span v-if="loading" class="loading loading-spinner" />
             Upload
           </button>
         </div>
@@ -35,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { defineEmits, defineProps } from 'vue';
 import { supabase } from '@/services/supabase';
 import ModalComponent from '../ui/ModalComponent.vue';
@@ -66,9 +67,15 @@ const onFileChange = (event: Event) => {
   }
 };
 
+const fileInput: Ref<HTMLInputElement | null> = ref(null);
+
 const resetUploader = () => {
   previewModal.value = false;
   previewUrl.value = null;
+
+  if (fileInput.value) {
+    fileInput.value.value = '';
+  }
 };
 
 const initUpload = async () => {

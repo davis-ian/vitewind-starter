@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="p-4">
     <div>
       <div v-if="loading" class="px-4">
         <progress class="progress progress-primary"></progress>
@@ -12,19 +12,23 @@
         {{ formatDate(profile?.last_sign_in_at) }}
       </p>
     </div>
-    <div>
-      <img
-        class="max-h-xs max-w-xs"
-        v-if="avatar_url"
-        :src="avatar_url"
-        alt="Avatar Image"
-      />
+    <div class="grid grid-cols-1 md:grid-cols-2">
+      <div>
+        <img
+          class="max-h-xs max-w-xs"
+          v-if="avatar_url"
+          :src="avatar_url"
+          alt="Avatar Image"
+        />
 
-      <UploadComponent
-        @success="updateAvatar"
-        @error="handleUploadError"
-        bucket-name="avatars"
-      ></UploadComponent>
+        <UploadComponent
+          class="py-4"
+          @success="updateAvatar"
+          @error="handleUploadError"
+          bucket-name="avatars"
+        ></UploadComponent>
+      </div>
+
       <form
         class="form-widget flex flex-col gap-4"
         @submit.prevent="updateProfile"
