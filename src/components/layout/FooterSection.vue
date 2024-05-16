@@ -21,7 +21,7 @@
         <a class="link-hover link">Privacy policy</a>
         <a class="link-hover link">Cookie policy</a>
       </nav>
-      <form>
+      <div>
         <h6 class="footer-title">Newsletter</h6>
         <fieldset class="form-control w-80">
           <label class="label">
@@ -32,13 +32,28 @@
               type="text"
               placeholder="username@site.com"
               class="input join-item input-bordered"
+              v-model="userEmail"
             />
-            <button class="btn btn-primary join-item">Subscribe</button>
+            <button @click="submitUserEmail" class="btn btn-primary join-item">
+              Subscribe
+            </button>
           </div>
         </fieldset>
-      </form>
+      </div>
     </footer>
   </div>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from 'vue';
+
+const userEmail = ref<string | null>(null);
+
+const submitUserEmail = () => {
+  //TODO:
+  //HANDLE USER EMAIL SAVE
+
+  userEmail.value = null;
+  alert('Subscribed to newsletter');
+};
+</script>
 <style></style>
