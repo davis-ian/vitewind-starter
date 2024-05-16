@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
 const authStore = useAuthStore();
 
@@ -32,8 +32,6 @@ onMounted(() => {
   authStore.fetchUser();
   authStore.initializeAuthListener();
 });
-
-console.log(authStore, 'auth store');
 </script>
 
 <style></style>

@@ -28,7 +28,7 @@
 
 <script setup lang="ts">
 import FaqComponent from '@/components/sales/FAQSection.vue';
-import Pricing from '@/components/layout/PricingSection.vue';
+import Pricing from '@/components/sales/PricingSection.vue';
 import Hero from '@/components/layout/HeroSection.vue';
 import Cta1 from '@/components/sales/CTASection.vue';
 import FooterSection from '@/components/layout/FooterSection.vue';

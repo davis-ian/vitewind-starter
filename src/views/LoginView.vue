@@ -7,6 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import AuthComponent from '@/components/supabase/AuthComponent.vue';
+import AuthComponent from '@/components/supabase/LoginComponent.vue';
 import CardComponent from '@/components/ui/CardComponent.vue';
 </script>

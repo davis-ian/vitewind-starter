@@ -327,7 +327,6 @@ const isSelected = (item: Item) => {
 
 const toggleItemSelection = (item: Item) => {
   const itemId = item.id;
-  console.log(itemId, 'itemId');
 
   if (isSelected(item)) {
     state.selectedItems = state.selectedItems.filter((id) => id !== itemId);

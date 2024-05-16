@@ -4,7 +4,6 @@
       class="grid max-w-screen-2xl grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3"
     >
       <!-- START: Row 1 -->
-
       <CardComponent class="sm:col-span-2 md:col-span-3">
         <template #title>
           <h3 class="text-2xl font-bold">Users</h3>
@@ -39,24 +38,13 @@
 
 <script setup lang="ts">
 import UserTable from '@/components/tables/UserTable.vue';
-import BasicImageCard from '@/components/BasicImageCard.vue';
+import BasicImageCard from '@/components/ui/BasicImageCard.vue';
 import AlbumTable from '@/components/tables/AlbumTable.vue';
 import CardComponent from '@/components/ui/CardComponent.vue';
 
 const handleClick = () => {
   console.log('btn clicked!');
 };
-
-const headers = [
-  { text: 'Name', value: 'name' },
-  { text: 'Age', value: 'age' }
-];
-
-const items = [
-  { name: 'Ian', age: '32' },
-  { name: 'Alex', age: '30' },
-  { name: 'Bella', age: '7' }
-];
 </script>
 
 <style></style>

@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { defineEmits, defineProps } from 'vue';
 import { supabase } from '@/services/supabase';
 import ModalComponent from '../ui/ModalComponent.vue';
@@ -84,7 +84,7 @@ const initUpload = async () => {
   try {
     loading.value = true;
     const fileName = `${Date.now()}-${file.value.name}`;
-    const { data, error } = await supabase.storage
+    const { error } = await supabase.storage
       .from(props.bucketName)
       .upload(fileName, file.value);
 
