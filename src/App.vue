@@ -9,9 +9,14 @@
       <a v-if="$route.path == '/'" href="#pricing">Pricing</a>
       <a v-if="$route.path == '/'" href="#faq">FAQ</a>
 
-      <a v-if="$route.path == '/'" href="/dashboard">Dashboard</a>
       <a v-if="$route.path != '/'" href="/">Home</a>
-      <a v-if="authStore.isAuthenticated" href="/profile">Profile</a>
+
+      <a v-if="$route.path != '/dashboard'" href="/dashboard">Dashboard</a>
+      <a
+        v-if="authStore.isAuthenticated && $route.name != 'Profile'"
+        href="/profile"
+        >Profile</a
+      >
       <a v-if="!authStore.isAuthenticated" href="/login">Login</a>
     </div>
 
