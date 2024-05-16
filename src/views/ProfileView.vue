@@ -1,6 +1,9 @@
 <template>
-  <div class="p-4">
-    <ProfileComponent v-if="authAuthStore.isAuthenticated"></ProfileComponent>
+  <div class="flex justify-center">
+    <ProfileComponent
+      class="max-w-4xl flex-grow"
+      v-if="authAuthStore.isAuthenticated"
+    ></ProfileComponent>
   </div>
 </template>
 

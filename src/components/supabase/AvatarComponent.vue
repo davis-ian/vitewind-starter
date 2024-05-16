@@ -27,27 +27,12 @@
         id="single"
       />
     </div>
-    <HamburgerBtn @open="handleOpen" @close="handleClose"></HamburgerBtn>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, toRefs, watch, defineEmits, defineProps, type Ref } from 'vue';
+import { ref, defineEmits, type Ref } from 'vue';
 import { supabase } from '@/services/supabase';
-import HamburgerBtn from '@/components/ui/HamburgerBtn.vue';
-
-const props = defineProps<{
-  path: string;
-  size: string;
-}>();
-const { path, size } = toRefs(props);
-
-const handleOpen = () => {
-  console.log('open heard');
-};
-const handleClose = () => {
-  console.log('close heard');
-};
 
 const emit = defineEmits<{
   (e: 'upload'): void;
@@ -56,11 +41,12 @@ const emit = defineEmits<{
 
 const loading = ref(false);
 const src = ref<string>('');
-const files: Ref<File[]> = ref([]);
+const files: Ref<FileList | null> = ref(null);
 
-const initAvatarPreview = (e) => {
-  files.value = e.target.files;
-  console.log('file change event', e);
+const initAvatarPreview = (e: Event | null) => {
+  const input = e?.target as HTMLInputElement;
+
+  files.value = input?.files;
 
   if (!files.value || files.value.length === 0) {
     throw new Error('You must select an image to upload');
@@ -74,7 +60,7 @@ const uploadAvatar = async () => {
   try {
     loading.value = true;
 
-    if (!files.value.length) {
+    if (!files?.value?.length) {
       throw new Error('No files selected');
     }
 
@@ -89,25 +75,10 @@ const uploadAvatar = async () => {
     if (uploadError) throw uploadError;
     emit('update:path', filePath);
     emit('upload');
-
-    console.log('upload success');
   } catch (error) {
     console.log(error, 'error uploading avatar');
   } finally {
     loading.value = false;
-  }
-};
-
-const downloadImage = async () => {
-  try {
-    const { data, error } = await supabase.storage
-      .from('avatars')
-      .download(path.value);
-
-    if (error) throw error;
-    src.value = URL.createObjectURL(data);
-  } catch (error) {
-    console.log(error, 'Error  downloading image: ');
   }
 };
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div>
     <div>
       <div v-if="loading" class="px-4">
         <progress class="progress progress-primary"></progress>
@@ -7,19 +7,18 @@
     </div>
 
     <div>
-      <p v-if="profile?.last_sign_in_at">
-        Last Sign In:
+      <p class="py-4" v-if="profile?.last_sign_in_at">
+        Last Login In:
         {{ formatDate(profile?.last_sign_in_at) }}
       </p>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2">
+    <div>
       <div>
-        <img
-          class="max-h-xs max-w-xs"
-          v-if="avatar_url"
-          :src="avatar_url"
-          alt="Avatar Image"
-        />
+        <div class="avatar">
+          <div class="max-w-xs">
+            <img v-if="avatar_url" :src="avatar_url" alt="Avatar Image" />
+          </div>
+        </div>
 
         <UploadComponent
           class="py-4"
@@ -52,15 +51,6 @@
             v-model="username"
           />
         </div>
-        <!-- <div class="flex flex-col">
-          <label for="website">Website</label>
-          <input
-            id="website"
-            type="url"
-            class="input input-bordered w-full"
-            v-model="website"
-          />
-        </div> -->
 
         <div class="flex flex-col gap-4">
           <input
@@ -86,7 +76,7 @@
 <script setup lang="ts">
 import { supabase } from '@/services/supabase';
 import { onMounted, ref } from 'vue';
-import { type User, type Session } from '@supabase/supabase-js';
+import { type User } from '@supabase/supabase-js';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import UploadComponent from '@/components/supabase/UploadComponent.vue';
@@ -101,7 +91,6 @@ interface Profile {
   website?: string | null;
 }
 
-// const props = defineProps<{ session: Session }>();
 const loading = ref<boolean>(true);
 const profile = ref<User | null>(null);
 
@@ -115,7 +104,6 @@ const handleUploadError = (error: Error) => {
 
 onMounted(async () => {
   await getProfile();
-  getPublicUrl();
 });
 
 const formatDate = (dateString: string) => {
@@ -142,12 +130,9 @@ async function getProfile() {
     if (error && status !== 406) throw error;
 
     if (data) {
-      console.log(data, 'user data thing');
       username.value = data.username;
       website.value = data.website;
       avatar_url.value = data.avatar_url;
-
-      console.log(data, 'user data');
     }
   } catch (error) {
     alert((error as Error).message);
@@ -155,20 +140,6 @@ async function getProfile() {
     loading.value = false;
   }
 }
-
-const getPublicUrl = () => {
-  const fileName = '1715689370866-images-1.png';
-
-  const {
-    data: { publicUrl }
-  } = supabase.storage.from('avatars').getPublicUrl(fileName);
-
-  if (!publicUrl) {
-    throw new Error('Failed to get public URL');
-  }
-
-  console.log(publicUrl, 'public url');
-};
 
 const updateAvatar = async (url: string) => {
   if (!url) return;
@@ -179,7 +150,6 @@ const updateAvatar = async (url: string) => {
 };
 
 async function updateProfile() {
-  console.log('updating profile');
   try {
     loading.value = true;
     const user = authStore.user;
@@ -195,7 +165,6 @@ async function updateProfile() {
       updated_at: new Date().toISOString()
     };
 
-    console.log(updates, 'Updates');
     const { error } = await supabase.from('profiles').upsert(updates);
 
     if (error) throw error;
@@ -207,6 +176,7 @@ async function updateProfile() {
 }
 
 const router = useRouter();
+
 async function signOut() {
   try {
     loading.value = true;
