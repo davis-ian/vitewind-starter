@@ -6,8 +6,8 @@
     "composite": true,
     // "allowJs": true,
     "strict": true,
+    "verbatimModuleSyntax": false,
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
-
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

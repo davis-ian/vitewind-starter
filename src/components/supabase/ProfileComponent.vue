@@ -7,16 +7,21 @@
     </div>
 
     <div>
-      <p class="py-4" v-if="profile?.last_sign_in_at">
+      <p class="py-4" v-if="user?.last_sign_in_at">
         Last Login In:
-        {{ formatDate(profile?.last_sign_in_at) }}
+        {{ formatDate(user?.last_sign_in_at) }}
       </p>
     </div>
     <div>
       <div>
-        <div class="avatar">
+        <div v-if="profile.avatar_url" class="avatar">
           <div class="max-w-xs">
-            <img v-if="avatar_url" :src="avatar_url" alt="Avatar Image" />
+            <img :src="profile.avatar_url" alt="Avatar Image" />
+          </div>
+        </div>
+        <div v-else class="avatar placeholder">
+          <div class="w-80 border-2 border-neutral text-neutral-content">
+            <span class="">No Image</span>
           </div>
         </div>
 
@@ -38,7 +43,7 @@
             id="email"
             type="text"
             class="input input-bordered w-full"
-            :value="profile?.email"
+            :value="user?.email"
             disabled
           />
         </div>
@@ -48,7 +53,7 @@
             id="username"
             type="text"
             class="input input-bordered w-full"
-            v-model="username"
+            v-model="profile.username"
           />
         </div>
 
@@ -76,30 +81,25 @@
 <script setup lang="ts">
 import { supabase } from '@/services/supabase';
 import { onMounted, ref } from 'vue';
-import { type User } from '@supabase/supabase-js';
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import UploadComponent from '@/components/supabase/UploadComponent.vue';
 const authStore = useAuthStore();
+const user = authStore.user;
 
-interface Profile {
-  id: string;
-  updated_at: string | null;
-  username?: string | null;
-  full_name?: string | null;
-  avatar_url?: string | null;
-  website?: string | null;
-}
+type Profile = {
+  username: string | null;
+  avatar_url: string | null;
+};
+const profile = ref<Profile>({
+  username: '',
+  avatar_url: ''
+});
 
 const loading = ref<boolean>(true);
-const profile = ref<User | null>(null);
-
-const username = ref<string>('');
-const website = ref<string>('');
-const avatar_url = ref<string>('');
 
 const handleUploadError = (error: Error) => {
-  alert('Error uploading image');
+  alert(`Error uploading image: ${error.message}`);
 };
 
 onMounted(async () => {
@@ -117,22 +117,17 @@ const formatDate = (dateString: string) => {
 
 async function getProfile() {
   try {
-    const user = authStore.user;
-
-    profile.value = user;
-
     let { data, error, status } = await supabase
       .from('profiles')
-      .select(`username, website, avatar_url`)
+      .select(`username, avatar_url`)
       .eq('id', user?.id)
       .single();
 
     if (error && status !== 406) throw error;
 
     if (data) {
-      username.value = data.username;
-      website.value = data.website;
-      avatar_url.value = data.avatar_url;
+      profile.value.username = data.username;
+      profile.value.avatar_url = data.avatar_url;
     }
   } catch (error) {
     alert((error as Error).message);
@@ -144,7 +139,7 @@ async function getProfile() {
 const updateAvatar = async (url: string) => {
   if (!url) return;
 
-  avatar_url.value = url;
+  profile.value.avatar_url = url;
 
   await updateProfile();
 };
@@ -152,20 +147,12 @@ const updateAvatar = async (url: string) => {
 async function updateProfile() {
   try {
     loading.value = true;
-    const user = authStore.user;
 
     if (user === null) {
       throw new Error('User cannot be null');
     }
 
-    const updates: Profile = {
-      id: user.id,
-      username: username.value,
-      avatar_url: avatar_url.value,
-      updated_at: new Date().toISOString()
-    };
-
-    const { error } = await supabase.from('profiles').upsert(updates);
+    const { error } = await supabase.from('profiles').upsert(profile.value);
 
     if (error) throw error;
   } catch (error) {
@@ -182,10 +169,8 @@ async function signOut() {
     loading.value = true;
     const { error } = await supabase.auth.signOut();
 
-    profile.value = null;
-    username.value = '';
-    website.value = '';
-    avatar_url.value = '';
+    profile.value.avatar_url = '';
+    profile.value.username = '';
 
     authStore.signOut();
 
