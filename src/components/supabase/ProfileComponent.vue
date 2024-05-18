@@ -6,75 +6,69 @@
       </div>
     </div>
 
-    <div>
-      <p class="py-4" v-if="user?.last_sign_in_at">
-        Last Login In:
-        {{ formatDate(user?.last_sign_in_at) }}
-      </p>
-    </div>
-    <div>
-      <div>
-        <div v-if="profile.avatar_url" class="avatar">
-          <div class="max-w-xs">
-            <img :src="profile.avatar_url" alt="Avatar Image" />
-          </div>
-        </div>
-        <div v-else class="avatar placeholder">
-          <div class="w-80 border-2 border-neutral text-neutral-content">
-            <span class="">No Image</span>
-          </div>
-        </div>
+    <p class="py-4" v-if="user?.last_sign_in_at">
+      Last Login In:
+      {{ formatDate(user?.last_sign_in_at) }}
+    </p>
 
-        <UploadComponent
-          class="py-4"
-          @success="updateAvatar"
-          @error="handleUploadError"
-          bucket-name="avatars"
-        ></UploadComponent>
+    <div v-if="profile.avatar_url" class="avatar">
+      <div class="max-w-xs">
+        <img :src="profile.avatar_url" alt="Avatar Image" />
+      </div>
+    </div>
+    <div v-else class="avatar placeholder">
+      <div class="w-80 border-2 border-neutral text-neutral-content">
+        <span class="">No Image</span>
+      </div>
+    </div>
+    <UploadComponent
+      class="py-4"
+      @success="updateAvatar"
+      @error="handleUploadError"
+      bucket-name="avatars"
+    ></UploadComponent>
+
+    <form
+      class="form-widget flex flex-col gap-4"
+      @submit.prevent="updateProfile"
+    >
+      <div class="flex flex-col">
+        <label for="email">Email</label>
+        <input
+          id="email"
+          type="text"
+          class="input input-bordered w-full"
+          :value="user?.email"
+          disabled
+        />
+      </div>
+      <div class="flex flex-col">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          class="input input-bordered w-full"
+          v-model="profile.username"
+        />
       </div>
 
-      <form
-        class="form-widget flex flex-col gap-4"
-        @submit.prevent="updateProfile"
-      >
-        <div class="flex flex-col">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            type="text"
-            class="input input-bordered w-full"
-            :value="user?.email"
-            disabled
-          />
-        </div>
-        <div class="flex flex-col">
-          <label for="username">Username</label>
-          <input
-            id="username"
-            type="text"
-            class="input input-bordered w-full"
-            v-model="profile.username"
-          />
-        </div>
+      <div class="flex flex-col gap-4">
+        <input
+          type="submit"
+          class="btn btn-primary"
+          :value="loading ? 'Loading ...' : 'Update'"
+          :disabled="loading"
+        />
 
-        <div class="flex flex-col gap-4">
-          <input
-            type="submit"
-            class="btn btn-primary"
-            :value="loading ? 'Loading ...' : 'Update'"
-            :disabled="loading"
-          />
-
-          <button
-            class="btn btn-outline btn-primary"
-            @click="signOut"
-            :disabled="loading"
-          >
-            Sign Out
-          </button>
-        </div>
-      </form>
-    </div>
+        <button
+          class="btn btn-outline btn-primary"
+          @click="signOut"
+          :disabled="loading"
+        >
+          Sign Out
+        </button>
+      </div>
+    </form>
   </div>
 </template>
 
