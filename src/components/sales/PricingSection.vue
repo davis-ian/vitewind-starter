@@ -19,7 +19,7 @@
       class="relative flex flex-col items-center gap-8 lg:flex-row lg:items-stretch"
     >
       <!-- First Pricing Option -->
-      <PricingOption :initial-price="269" :reduced-price="169">
+      <PricingOption :initial-price="199" :reduced-price="169">
         <template #title>
           <span>Starter</span>
         </template>
@@ -55,7 +55,7 @@
       </PricingOption>
 
       <!-- Suggested Pricing Option -->
-      <PricingOption suggested :initial-price="269" :reduced-price="169">
+      <PricingOption suggested :initial-price="269" :reduced-price="199">
         <template #title>
           <span>Starter</span>
         </template>

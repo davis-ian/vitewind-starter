@@ -23,10 +23,12 @@
             <span
               class="absolute inset-x-0 top-[48%] h-[1.5px] bg-base-content"
             ></span
-            ><span class="text-base-content">$<!-- -->299</span>
+            ><span class="text-base-content">${{ props.initialPrice }}</span>
           </p>
         </div>
-        <p class="text-5xl font-extrabold tracking-tight">$<!-- -->199</p>
+        <p class="text-5xl font-extrabold tracking-tight">
+          ${{ props.reducedPrice }}
+        </p>
         <div class="mb-[4px] flex flex-col justify-end">
           <p class="text-xs font-semibold uppercase opacity-60">USD</p>
         </div>
